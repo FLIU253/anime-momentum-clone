@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class = "title">Schedule</h1>
+    <h1 class = "title">Anime Schedule</h1>
     <div class = "date-section">
       <span  v-on:click ="getSchedule('monday')" style = "cursor: pointer;">Monday</span>
       <span  v-on:click ="getSchedule('tuesday')" style = "cursor: pointer;">Tuesday</span>
