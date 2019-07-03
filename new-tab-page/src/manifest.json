@@ -1,5 +1,8 @@
 {
   "name": "new-tab-page",
+  "chrome_url_overrides": {
+    "newtab": "tab/tab.html"
+  },
   "description": "A Vue.js web extension",
   "version": null,
   "manifest_version": 2,
