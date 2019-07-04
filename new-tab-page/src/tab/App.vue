@@ -16,6 +16,11 @@ export default {
       message: ''
     }
   },
+  created(){
+    let rand = parseInt(Math.random() * 5 + 1);
+    document.getElementById('image').src = `../icons/backgrounds/${rand}.png`;
+
+  },
   mounted(){
     if(0 <= this.hour < 12){
       this.message = "Morning"
@@ -24,6 +29,10 @@ export default {
       this.message = "Afternoon"
     }else{
       this.message = "Evening"
+    }
+
+    if(this.minute < 10){
+      this.minute = '0' + this.minute
     }
   }
 }
