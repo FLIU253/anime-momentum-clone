@@ -3,6 +3,7 @@
       <div class = "temp-section" style = "z-index: 9999">
         <div style = "text-align: left; margin-left: 20px; margin-top: 20px; cursor:pointer;">
           <span v-on:click="redirectToNewTab">Chrome Tab</span>
+           <span v-on:click="redirectToApps" style = "margin-left: 20px;">Apps</span>
         </div>
         <div style = "text-align: center; margin-top: 20px;">
           <input type="text" class ="google-search" placeholder = "google search here!" v-model ="searchValue" v-on:keyup.enter="searchGoogle(searchValue)">
@@ -13,7 +14,7 @@
       </div>
       </div>
     <div class="date-section">
-      <h1>{{hour}}:{{minute}}</h1>
+      <h1><i class="far fa-clock" style = "font-size: 90%;"></i> {{hour}}:{{minute}}</h1>
       <div v-if = "name.length === 0">
         <h3>What is Your name?</h3>
         <input type="text" v-model = "nameInputDetection" v-on:keyup.enter="storeName" class = "name-section"> 
@@ -48,10 +49,10 @@ export default {
     this.getLocation();
   },
   mounted(){
-    if(0 <= this.hour < 12){
-      this.message = "Morning"
+    if(0<= this.hour && this.hour < 12){
+      this.message = "Morning";
     }
-    else if( 6 > this.hour >= 12 ){
+    else if( 13 <= this.hour && this.hour  < 18){
       this.message = "Afternoon"
     }else{
       this.message = "Evening"
@@ -98,10 +99,16 @@ export default {
     });
   },
   searchGoogle(value){
-    console.log(value);
       chrome.tabs.getCurrent(function(tab){
           chrome.tabs.update(tab.id, {
         url: `https://www.google.com/search?q=${value}`
+      });
+    });
+  },
+  redirectToApps(){
+     chrome.tabs.getCurrent(function(tab){
+          chrome.tabs.update(tab.id, {
+        url: `chrome://apps/`
       });
     });
   }
