@@ -2,7 +2,13 @@
   <div class = "container">
     <div class="date-section">
       <h1>{{hour}}:{{minute}}</h1>
-      <h3>Good {{message}}.</h3>
+      <div v-if = "name.length === 0">
+        <h3>What is Your name?</h3>
+        <input type="text" v-model = "nameInputDetection" v-on:keyup.enter="storeName"> 
+      </div>
+      <div v-else>
+        <h3 style = "display:inline;">Good {{message}}, </h3><h3 style = "display:inline;">{{name}}. </h3>
+      </div>
     </div>
   </div>
 </template>
@@ -13,7 +19,9 @@ export default {
     return {
       hour: new Date().getHours(),
       minute: new Date().getMinutes(),
-      message: ''
+      message: '',
+      name: '',
+      nameInputDetection: ''
     }
   },
   created(){
@@ -33,6 +41,18 @@ export default {
 
     if(this.minute < 10){
       this.minute = '0' + this.minute
+    }
+
+    if(localStorage.name) this.name = localStorage.name;
+  },
+  methods:{
+    storeName(){
+      this.name = this.nameInputDetection;
+    }
+  },
+  watch: {
+    name(newName) {
+      localStorage.name = newName;
     }
   }
 }
@@ -58,5 +78,16 @@ div{
 }
 h1, h3{
   margin: 0;
+}
+input{
+  background: transparent;
+  border:none;
+  border-bottom: 10px solid #ffffff;
+  height: 60px;
+  color: white;
+  font-size: 50px;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
