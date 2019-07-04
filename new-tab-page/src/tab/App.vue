@@ -1,5 +1,9 @@
 <template>
   <div class = "container">
+      <div class = "temp-section">
+        <h3>{{temperature}} &#8451;</h3>
+        <h3>{{location}}</h3>
+      </div>
     <div class="date-section">
       <h1>{{hour}}:{{minute}}</h1>
       <div v-if = "name.length === 0">
@@ -14,6 +18,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data () {
     return {
@@ -21,13 +27,15 @@ export default {
       minute: new Date().getMinutes(),
       message: '',
       name: '',
-      nameInputDetection: ''
+      nameInputDetection: '',
+      temperature: '',
+      location: '',
     }
   },
   created(){
     let rand = parseInt(Math.random() * 5 + 1);
     document.getElementById('image').src = `../icons/backgrounds/${rand}.png`;
-
+    this.getLocation();
   },
   mounted(){
     if(0 <= this.hour < 12){
@@ -48,6 +56,28 @@ export default {
   methods:{
     storeName(){
       this.name = this.nameInputDetection;
+    },
+    getLocation(){
+    if('geolocation' in navigator){
+      var vm = this; 
+
+      navigator.geolocation.getCurrentPosition(
+        function success(position){
+             axios.get(`http://api.apixu.com/v1/current.json?key=3c58889021c44dc394c170421190407&q=${position.coords.latitude},${position.coords.longitude}`)
+             .then(res => {
+              vm.temperature = res.data.current.feelslike_c;
+              vm.location = res.data.location.name;
+              console.log(vm.temperature);
+              })
+             .catch(err => console.log(err));
+        },
+        function error(error_message){
+           console.error('An error has occured while retrieving location', error_message)
+        }
+      );
+    }else{
+      console.log('geolocation is not enabled on this browser');
+    }
     }
   },
   watch: {
@@ -63,7 +93,7 @@ div{
   font-family: 'Poppins', sans-serif;
 }
 .container{
-  position: relative;
+  position: absolute;
 }
 .date-section{
   font-size: 75px;
@@ -89,5 +119,12 @@ input{
   width: 100%;
   font-weight: bold;
   text-align: center;
+}
+.temp-section{
+  font-size: 25px;
+  color: white;
+  position: fixed;
+  text-align: right;
+  width: 99%;
 }
 </style>

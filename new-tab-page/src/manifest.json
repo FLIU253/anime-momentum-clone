@@ -18,5 +18,8 @@
     "scripts": [
       "background.js"
     ]
-  }
+  },
+  "permissions": [
+    "geolocation"
+  ]
 }
