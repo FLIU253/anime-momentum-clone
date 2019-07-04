@@ -44,7 +44,7 @@ export default {
     }
   },
   created(){
-    let rand = parseInt(Math.random() * 5 + 1);
+    let rand = parseInt(Math.random() * 9 + 1);
     document.getElementById('image').src = `../icons/backgrounds/${rand}.png`;
     this.getLocation();
   },
@@ -79,7 +79,6 @@ export default {
               vm.temperature = res.data.current.feelslike_c;
               vm.location = res.data.location.name + ', ' + res.data.location.region;
               vm.weatherCondition = res.data.current.condition.text;
-              console.log(vm.temperature);
               })
              .catch(err => console.log(err));
         },
