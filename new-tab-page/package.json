@@ -1,7 +1,7 @@
 {
-  "name": "new-tab-page",
+  "name": "ani-extension",
   "version": "1.0.0",
-  "description": "A Vue.js web extension",
+  "description": "Anime Themed Extension With an Anime Season Tracker",
   "author": "Franklin Liu",
   "license": "MIT",
   "scripts": {
