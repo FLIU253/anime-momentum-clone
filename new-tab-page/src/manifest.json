@@ -20,6 +20,7 @@
     ]
   },
   "permissions": [
-    "geolocation"
+    "geolocation",
+    "https://wall.alphacoders.com/*"
   ]
 }

@@ -10,7 +10,7 @@
         </div>
       <div style = "margin-right: 20px; margin-top: 20px;">
         <h4>{{temperature}} &#8451;, {{weatherCondition}}</h4>
-        <h4>{{location}}</h4>
+        <h4 style = "font-size: 20px; margin-top: 10px;">{{location}}</h4>
       </div>
       </div>
     <div class="date-section">
@@ -21,6 +21,9 @@
       </div>
       <div v-else>
         <h3 style = "display:inline;">Good {{message}}, </h3><h3 style = "display:inline;">{{name}}. </h3>
+      </div>
+      <div class ="sauce-name">
+        Sauce: {{picSauce.sub_category}}
       </div>
     </div>
   </div>
@@ -40,12 +43,32 @@ export default {
       temperature: '',
       location: '',
       weatherCondition: '',
-      searchValue: ''
+      searchValue: '',
+      picSauce: '',
     }
   },
   created(){
-    let rand = parseInt(Math.random() * 9 + 1);
-    document.getElementById('image').src = `../icons/backgrounds/${rand}.png`;
+    let rand = parseInt(Math.random() * 1000 + 1);
+    let rand2 = parseInt(Math.random() * 30 + 1);
+
+    axios.get(`https://wall.alphacoders.com/api2.0/get.php?auth=48652087b664d19d53d47976917858b8&method=category&id=3&sort=favorites&width=1920&height-1080&page=${rand}&info_level=3`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": "true"
+      }
+    }
+        )
+    .then(res => {
+        this.picSauce = res.data.wallpapers[rand2];
+        document.getElementById('image').src = this.picSauce.url_image;
+        console.log(this.picSauce.sub_category);
+      })
+    .catch(err => console.log(err));
+
     this.getLocation();
   },
   mounted(){
@@ -63,6 +86,7 @@ export default {
     }
 
     if(localStorage.name) this.name = localStorage.name;
+    
   },
   methods:{
     storeName(){
@@ -74,11 +98,16 @@ export default {
 
       navigator.geolocation.getCurrentPosition(
         function success(position){
-             axios.get(`http://api.apixu.com/v1/current.json?key=3c58889021c44dc394c170421190407&q=${position.coords.latitude},${position.coords.longitude}`)
+            axios.get(`http://api.apixu.com/v1/current.json?key=3c58889021c44dc394c170421190407&q=${position.coords.latitude},${position.coords.longitude}`)
              .then(res => {
-              vm.temperature = res.data.current.feelslike_c;
               vm.location = res.data.location.name + ', ' + res.data.location.region;
               vm.weatherCondition = res.data.current.condition.text;
+              })
+             .catch(err => console.log(err));
+            
+            axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=2affd308270b35de26051eb43ed071fa`)
+             .then(res => {
+              vm.temperature = res.data.main.temp;
               })
              .catch(err => console.log(err));
         },
@@ -124,6 +153,7 @@ export default {
 div{
  font-family: 'Lato', sans-serif;
 }
+
 .container{
   position: absolute;
 }
@@ -137,6 +167,7 @@ div{
   position: fixed;
   align-items: center;
   justify-content: center;
+  mix-blend-mode: exclusion;
   text-align: center;
 }
 .google-search{
@@ -145,6 +176,7 @@ div{
   border-bottom: 2px solid #ffffff;
   height: 30px;
   color: white;
+  mix-blend-mode: exclusion;
   font-size: 20px;
   width: 100%;
   font-weight: bold;
@@ -152,6 +184,7 @@ div{
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: white;
+  mix-blend-mode: exclusion;
   opacity: 0.6; /* Firefox */
 }
 h1, h3, h4{
@@ -166,6 +199,7 @@ h3{
   border-bottom: 5px solid #ffffff;
   height: 60px;
   color: white;
+  mix-blend-mode: exclusion;
   font-size: 40px;
   width: 100%;
   font-weight: bold;
@@ -176,8 +210,14 @@ h3{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   color: white;
+  mix-blend-mode: exclusion;
   position: fixed;
   text-align: right;
   width: 99%;
+}
+.sauce-name{
+  margin-top:  50px;
+  font-size: 30px;
+  bottom: 0;
 }
 </style>
