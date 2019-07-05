@@ -15,6 +15,7 @@
       </div>
     <div class="date-section">
       <h1><i class="far fa-clock" style = "font-size: 90%;"></i> {{hour}}:{{minute}}</h1>
+      <h3>{{date}}</h3>
       <div v-if = "name.length === 0">
         <h3>What is Your name?</h3>
         <input type="text" v-model = "nameInputDetection" v-on:keyup.enter="storeName" class = "name-section"> 
@@ -23,7 +24,9 @@
         <h3 style = "display:inline;">Good {{message}}, </h3><h3 style = "display:inline;">{{name}}. </h3>
       </div>
       <div class ="sauce-name">
-        Sauce: {{picSauce.sub_category}}
+        <div v-if = "sauceString.length > 0">
+            Sauce: {{sauceString}}
+        </div>
       </div>
     </div>
   </div>
@@ -37,6 +40,7 @@ export default {
     return {
       hour: new Date().getHours(),
       minute: new Date().getMinutes(),
+      date: new Date().toDateString(),
       message: '',
       name: '',
       nameInputDetection: '',
@@ -45,6 +49,7 @@ export default {
       weatherCondition: '',
       searchValue: '',
       picSauce: '',
+      sauceString: ''
     }
   },
   created(){
@@ -64,8 +69,8 @@ export default {
         )
     .then(res => {
         this.picSauce = res.data.wallpapers[rand2];
+        this.sauceString = res.data.wallpapers[rand2].sub_category;
         document.getElementById('image').src = this.picSauce.url_image;
-        console.log(this.picSauce.sub_category);
       })
     .catch(err => console.log(err));
 
