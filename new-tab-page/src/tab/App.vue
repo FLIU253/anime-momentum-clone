@@ -97,7 +97,7 @@ export default {
     storeName(){
       this.name = this.nameInputDetection;
     },
-    getLocation(){
+    getLocation(){  
     if('geolocation' in navigator){
       var vm = this; 
 
